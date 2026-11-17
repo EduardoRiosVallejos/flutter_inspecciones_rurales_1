@@ -61,7 +61,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDpYv7Td5xhSx28IQkbwZRVnEz-u0FVv7w',
-    appId: '1:438270393392:android:934a8f3dcc27a94a14c1f5',
+    appId: '1:438270393392:android:8602353e1efb421014c1f5',
     messagingSenderId: '438270393392',
     projectId: 'flutter-inspecciones-rur-a56f3',
     storageBucket: 'flutter-inspecciones-rur-a56f3.firebasestorage.app',

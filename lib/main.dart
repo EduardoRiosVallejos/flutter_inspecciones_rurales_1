@@ -25,6 +25,6 @@ class MyApp extends StatelessWidget {
       initialBinding: GlobalBindings(),
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
-    ); // // GetMaterialApp
+    );
   }
 }

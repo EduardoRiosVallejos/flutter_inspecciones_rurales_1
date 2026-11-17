@@ -12,7 +12,12 @@
           "package_name": "com.example.flutter_inspecciones_rulales_1"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "438270393392-bnhro76s7o8t7boc3tvqqbamb5dp58te.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDpYv7Td5xhSx28IQkbwZRVnEz-u0FVv7w"
@@ -20,7 +25,41 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438270393392-bnhro76s7o8t7boc3tvqqbamb5dp58te.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438270393392:android:8602353e1efb421014c1f5",
+        "android_client_info": {
+          "package_name": "com.example.flutter_inspecciones_rurales_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438270393392-bnhro76s7o8t7boc3tvqqbamb5dp58te.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpYv7Td5xhSx28IQkbwZRVnEz-u0FVv7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438270393392-bnhro76s7o8t7boc3tvqqbamb5dp58te.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
