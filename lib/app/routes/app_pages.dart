@@ -1,4 +1,4 @@
-
+import '../modules/home/bindings/home_binding.dart';
 import 'package:get/get.dart';
 
 import '../modules/auth/bindings/auth_binding.dart';
@@ -14,6 +14,9 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 
 import 'app_routes.dart';
+
+import '../modules/inspection_form/bindings/inspection_form_binding.dart';
+import '../modules/inspection_form/views/inspection_form_view.dart';
 
 class AppPages {
   static const initial = AppRoutes.initial;
@@ -37,12 +40,17 @@ class AppPages {
     GetPage(
       name: AppRoutes.home,
       page: () => const HomeView(),
-      binding: AuthBinding(),
+      binding: HomeBinding(),
     ),
     GetPage(
       name: AppRoutes.profile,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.inspectionForm,
+      page: () => const InspectionFormView(),
+      binding: InspectionFormBinding(),
     ),
   ];
 }

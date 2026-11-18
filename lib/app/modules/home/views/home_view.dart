@@ -2,29 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../auth/controllers/auth_controller.dart';
-import '../../../routes/app_routes.dart';
+import '../controllers/home_controller.dart';
 
-class HomeView extends GetView<AuthController> {
+class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
-
-  Future<void> _logout() async {
-    final result = await controller.logout();
-
-    if (result) {
-      Get.snackbar(
-        'Sesión cerrada',
-        'Has cerrado sesión correctamente.',
-      );
-
-      Get.offAllNamed(AppRoutes.login);
-    } else {
-      Get.snackbar(
-        'Error',
-        controller.errorMessage.value,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,48 +14,183 @@ class HomeView extends GetView<AuthController> {
         title: const Text('Inspecciones Rurales'),
         actions: [
           IconButton(
-            onPressed: () {
-              Get.toNamed(AppRoutes.profile);
-            },
+            onPressed: controller.openProfile,
             icon: const Icon(Icons.person),
             tooltip: 'Mi perfil',
           ),
           IconButton(
-            onPressed: _logout,
+            onPressed: controller.logout,
             icon: const Icon(Icons.logout),
             tooltip: 'Cerrar sesión',
           ),
         ],
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(
-              Icons.fact_check_outlined,
-              size: 80,
-              color: Colors.green,
-            ),
-            const SizedBox(height: 20),
             const Text(
               '¡Bienvenido!',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             const SizedBox(height: 8),
-            const Text('Pantalla provisional de inicio'),
+
+            const Text(
+              'Panel principal de Inspecciones Rurales',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+
             const SizedBox(height: 25),
-            ElevatedButton.icon(
-              onPressed: () {
-                Get.toNamed(AppRoutes.profile);
+
+            const Text(
+              'Resumen de jornada',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
+            Row(
+              children: [
+                Expanded(
+                  child: _buildSummaryCard(
+                    icon: Icons.fact_check,
+                    title: 'Inspecciones',
+                    value: '0',
+                    color: Colors.green,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildSummaryCard(
+                    icon: Icons.cloud_upload,
+                    title: 'Pendientes',
+                    value: '0',
+                    color: Colors.orange,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 25),
+
+            const Text(
+              'Accesos principales',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
+            _buildMenuCard(
+              icon: Icons.add_location_alt,
+              title: 'Inspecciones',
+              subtitle: 'Registrar una nueva inspección',
+              onTap: controller.openInspectionForm,
+            ),
+
+            _buildMenuCard(
+              icon: Icons.history,
+              title: 'Historial',
+              subtitle: 'Consultar inspecciones anteriores',
+              onTap: () {
+                Get.snackbar(
+                  'Historial',
+                  'Este módulo se implementará en la Fase 12.',
+                );
               },
-              icon: const Icon(Icons.person),
-              label: const Text('Mi perfil'),
+            ),
+
+            _buildMenuCard(
+              icon: Icons.person_outline,
+              title: 'Mi perfil',
+              subtitle: 'Consultar y actualizar tus datos',
+              onTap: controller.openProfile,
+            ),
+
+            const SizedBox(height: 20),
+
+            Card(
+              child: ListTile(
+                leading: const Icon(
+                  Icons.cloud_done_outlined,
+                  color: Colors.green,
+                ),
+                title: const Text('Estado de conectividad'),
+                subtitle: const Text(
+                  'Indicador de conectividad pendiente de implementar',
+                ),
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSummaryCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 35,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      child: ListTile(
+        leading: Icon(
+          icon,
+          size: 30,
+          color: Colors.green,
+        ),
+        title: Text(title),
+        subtitle: Text(subtitle),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: onTap,
       ),
     );
   }

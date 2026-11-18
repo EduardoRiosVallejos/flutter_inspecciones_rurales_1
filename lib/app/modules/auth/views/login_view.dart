@@ -45,6 +45,8 @@ class _LoginViewState extends State<LoginView> {
         'Inicio de sesión exitoso.',
         snackPosition: SnackPosition.BOTTOM,
       );
+
+      Get.offAllNamed(AppRoutes.home);
     } else {
       Get.snackbar(
         'Error de inicio de sesión',
