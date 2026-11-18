@@ -1,11 +1,17 @@
 
 import 'package:get/get.dart';
+
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/register_view.dart';
+
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+
 import '../modules/home/views/home_view.dart';
+
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 
 import 'app_routes.dart';
 
@@ -32,6 +38,11 @@ class AppPages {
       name: AppRoutes.home,
       page: () => const HomeView(),
       binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

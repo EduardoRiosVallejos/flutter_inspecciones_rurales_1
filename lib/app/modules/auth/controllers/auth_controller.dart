@@ -1,14 +1,18 @@
-
+import '../../../data/models/app_user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import '../../../data/repositories/user_repository.dart';
 
 import '../../../services/auth_service.dart';
 
 class AuthController extends GetxController {
   final AuthService _authService;
 
+  final UserRepository _userRepository;
+
   AuthController({
     required this._authService,
+    required this._userRepository,
   });
 
   // Estados de la autenticación
@@ -17,31 +21,57 @@ class AuthController extends GetxController {
   final RxString successMessage = ''.obs;
 
   // Registrar usuario
-  Future<bool> register({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      _clearMessages();
-      isLoading.value = true;
 
-      await _authService.register(
-        email: email.trim(),
-        password: password,
-      );
+Future<bool> register({
+  required String name,
+  required String email,
+  required String password,
+}) async {
+  try {
+    _clearMessages();
+    isLoading.value = true;
 
-      successMessage.value = 'Cuenta creada correctamente.';
-      return true;
-    } on FirebaseAuthException catch (e) {
-      errorMessage.value = _getErrorMessage(e.code);
+    // Crear cuenta en Firebase Authentication
+    final credential = await _authService.register(
+      email: email.trim(),
+      password: password,
+    );
+
+    final firebaseUser = credential.user;
+
+    if (firebaseUser == null) {
+      errorMessage.value = 'No se pudo obtener el usuario registrado.';
       return false;
-    } catch (_) {
-      errorMessage.value = 'Ocurrió un error inesperado.';
-      return false;
-    } finally {
-      isLoading.value = false;
     }
+
+    // Preparar perfil del usuario
+    final now = DateTime.now();
+
+    final appUser = AppUserModel(
+      uid: firebaseUser.uid,
+      name: name.trim(),
+      email: firebaseUser.email ?? email.trim(),
+      createdAt: now,
+      updatedAt: now,
+    );
+
+    // Guardar perfil en Firestore
+    await _userRepository.createUser(appUser);
+
+    successMessage.value = 'Cuenta y perfil creados correctamente.';
+    return true;
+  } on FirebaseAuthException catch (e) {
+    errorMessage.value = _getErrorMessage(e.code);
+    return false;
+  } catch (e) {
+    errorMessage.value =
+        'La cuenta pudo crearse, pero no se pudo guardar el perfil. Comprueba tu conexión y Firestore.';
+    return false;
+  } finally {
+    isLoading.value = false;
   }
+}
+
 
   // Iniciar sesión
   Future<bool> login({

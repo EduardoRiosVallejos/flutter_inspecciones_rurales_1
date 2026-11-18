@@ -37,10 +37,11 @@ class _RegisterViewState extends State<RegisterView> {
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final success = await _authController.register(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-    );
+  final success = await _authController.register(
+    name: _nameController.text.trim(),
+    email: _emailController.text.trim(),
+    password: _passwordController.text,
+  );
 
     if (!mounted) return;
 

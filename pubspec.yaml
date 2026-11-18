@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.7.3
+  cloud_firestore: ^6.10.2
 
 dev_dependencies:
   flutter_test:
