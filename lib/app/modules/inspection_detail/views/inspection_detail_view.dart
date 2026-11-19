@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../routes/app_routes.dart';
 import '../controllers/inspection_detail_controller.dart';
 
 class InspectionDetailView
@@ -11,10 +12,48 @@ class InspectionDetailView
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalle de inspección'),
-        centerTitle: true,
-      ),
+
+appBar: AppBar(
+  title: const Text('Detalle de inspección'),
+  centerTitle: true,
+  actions: [
+    IconButton(
+      icon: const Icon(Icons.delete_outline),
+      tooltip: 'Eliminar inspección',
+      onPressed: () {
+        Get.dialog(
+          AlertDialog(
+            title: const Text('Eliminar inspección'),
+            content: const Text(
+              '¿Estás seguro de que deseas eliminar esta inspección? '
+              'Esta acción no se puede deshacer.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                  controller.deleteInspection();
+                },
+                child: const Text(
+                  'Eliminar',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+  ],
+),
+
+
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
@@ -48,24 +87,42 @@ class InspectionDetailView
                   fontWeight: FontWeight.bold,
                 ),
               ),
+
               const SizedBox(height: 20),
+
               _buildInfo('Tipo', inspection.type),
-              _buildInfo('Descripción', inspection.description),
-              _buildInfo('Observaciones', inspection.observations),
-              _buildInfo('Estado', inspection.status),
+
+              _buildInfo(
+                'Descripción',
+                inspection.description,
+              ),
+
+              _buildInfo(
+                'Observaciones',
+                inspection.observations,
+              ),
+
+              _buildInfo(
+                'Estado',
+                inspection.status,
+              ),
+
               _buildInfo(
                 'Fecha de creación',
                 _formatDate(inspection.createdAt),
               ),
+
               _buildInfo(
                 'Última actualización',
                 _formatDate(inspection.updatedAt),
               ),
+
               if (inspection.latitude != null)
                 _buildInfo(
                   'Latitud',
                   inspection.latitude.toString(),
                 ),
+
               if (inspection.longitude != null)
                 _buildInfo(
                   'Longitud',
@@ -73,6 +130,30 @@ class InspectionDetailView
                 ),
             ],
           ),
+        );
+      }),
+
+      floatingActionButton: Obx(() {
+        final inspection = controller.inspection.value;
+
+        if (inspection == null ||
+            controller.isLoading.value) {
+          return const SizedBox.shrink();
+        }
+
+        return FloatingActionButton.extended(
+        onPressed: () async {
+          final updated = await Get.toNamed(
+            AppRoutes.inspectionEdit,
+            arguments: inspection,
+          );
+
+          if (updated == true) {
+            await controller.loadInspection();
+          }
+        },
+          icon: const Icon(Icons.edit),
+          label: const Text('Editar'),
         );
       }),
     );
@@ -91,11 +172,14 @@ class InspectionDetailView
               fontSize: 15,
             ),
           ),
+
           const SizedBox(height: 5),
+
           Text(
             value.isEmpty ? 'Sin información' : value,
             style: const TextStyle(fontSize: 16),
           ),
+
           const Divider(),
         ],
       ),

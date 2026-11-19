@@ -8,4 +8,5 @@ abstract class AppRoutes {
   static const inspectionForm = '/inspection-form';
   static const inspections = '/inspections';
   static const inspectionDetail = '/inspection-detail';
+  static const inspectionEdit = '/inspection-edit';
 }

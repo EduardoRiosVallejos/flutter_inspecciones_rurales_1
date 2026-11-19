@@ -19,6 +19,17 @@ class InspectionRepository {
     _inspectionProvider.createInspection(inspection);
   }
 
+  // Actualizar una inspección existente.
+  void updateInspection(InspectionModel inspection) {
+    _inspectionProvider.updateInspection(inspection);
+  }
+
+
+  // Eliminar una inspección existente.
+  void deleteInspection(String inspectionId) {
+    _inspectionProvider.deleteInspection(inspectionId);
+  }
+
   // Obtener inspección por ID.
   Future<InspectionModel?> getInspection(String id) async {
     return await _inspectionProvider.getInspection(id);

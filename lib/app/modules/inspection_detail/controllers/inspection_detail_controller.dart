@@ -44,4 +44,21 @@ class InspectionDetailController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // Eliminar la inspección actual.
+  void deleteInspection() {
+    final currentInspection = inspection.value;
+
+    if (currentInspection == null) return;
+
+    inspectionRepository.deleteInspection(currentInspection.id);
+
+    Get.back();
+
+    Get.snackbar(
+      'Inspección eliminada',
+      'La solicitud de eliminación se realizó correctamente.',
+      duration: const Duration(seconds: 4),
+    );
+  }
 }

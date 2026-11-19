@@ -24,6 +24,9 @@ import '../modules/inspections/views/inspection_list_view.dart';
 import '../modules/inspection_detail/bindings/inspection_detail_binding.dart';
 import '../modules/inspection_detail/views/inspection_detail_view.dart';
 
+import '../modules/inspection_edit/bindings/inspection_edit_binding.dart';
+import '../modules/inspection_edit/views/inspection_edit_view.dart';
+
 class AppPages {
   static const initial = AppRoutes.initial;
 
@@ -68,5 +71,10 @@ class AppPages {
       page: () => const InspectionDetailView(),
       binding: InspectionDetailBinding(),
     ),
+    GetPage(
+    name: AppRoutes.inspectionEdit,
+    page: () => const InspectionEditView(),
+    binding: InspectionEditBinding(),
+  ),
   ];
 }

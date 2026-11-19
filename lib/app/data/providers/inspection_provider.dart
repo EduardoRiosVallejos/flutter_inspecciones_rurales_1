@@ -42,6 +42,48 @@ class InspectionProvider {
     );
   }
 
+
+  // Actualizar una inspección existente.
+  void updateInspection(InspectionModel inspection) {
+    debugPrint('ACTUALIZACIÓN ENVIADA: ${inspection.id}');
+
+    final updateFuture = _inspectionsCollection
+        .doc(inspection.id)
+        .update(inspection.toFirestore());
+
+    unawaited(
+      updateFuture.then((_) {
+        debugPrint(
+          'INSPECCIÓN ACTUALIZADA EN FIRESTORE: ${inspection.id}',
+        );
+      }).catchError((Object error) {
+        debugPrint(
+          'ERROR AL ACTUALIZAR ${inspection.id}: $error',
+        );
+      }),
+    );
+  }
+
+  // Eliminar una inspección existente.
+  void deleteInspection(String inspectionId) {
+    debugPrint('ELIMINACIÓN ENVIADA: $inspectionId');
+
+    final deleteFuture =
+        _inspectionsCollection.doc(inspectionId).delete();
+
+    unawaited(
+      deleteFuture.then((_) {
+        debugPrint(
+          'INSPECCIÓN ELIMINADA DE FIRESTORE: $inspectionId',
+        );
+      }).catchError((Object error) {
+        debugPrint(
+          'ERROR AL ELIMINAR INSPECCIÓN $inspectionId: $error',
+        );
+      }),
+    );
+  }
+
   // Obtener una inspección por su ID.
   Future<InspectionModel?> getInspection(String id) async {
     final document = await _inspectionsCollection.doc(id).get();
