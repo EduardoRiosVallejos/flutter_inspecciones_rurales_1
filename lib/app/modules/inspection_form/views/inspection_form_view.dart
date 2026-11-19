@@ -92,15 +92,14 @@ class InspectionFormView extends GetView<InspectionFormController> {
 
                           if (saved) {
                             debugPrint('NAVEGACION: regresando a Home');
+
                             Get.back();
 
-                            Future.delayed(const Duration(milliseconds: 300), () {
-                              Get.snackbar(
-                                'Inspección registrada',
-                                'El registro se ha enviado correctamente. Firebase lo sincronizará cuando haya conexión.',
-                                duration: const Duration(seconds: 4),
-                              );
-                            });
+                            Get.snackbar(
+                              'Inspección registrada',
+                              'La inspección se registró correctamente.',
+                              duration: const Duration(seconds: 4),
+                            );
                           } else {
                             debugPrint(
                               'NAVEGACION: no se ejecuto porque saved es false',

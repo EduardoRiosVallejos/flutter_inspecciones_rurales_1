@@ -105,12 +105,7 @@ class HomeView extends GetView<HomeController> {
               icon: Icons.history,
               title: 'Historial',
               subtitle: 'Consultar inspecciones anteriores',
-              onTap: () {
-                Get.snackbar(
-                  'Historial',
-                  'Este módulo se implementará en la Fase 12.',
-                );
-              },
+              onTap: controller.openInspectionList,
             ),
 
             _buildMenuCard(

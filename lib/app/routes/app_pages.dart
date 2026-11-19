@@ -18,6 +18,12 @@ import 'app_routes.dart';
 import '../modules/inspection_form/bindings/inspection_form_binding.dart';
 import '../modules/inspection_form/views/inspection_form_view.dart';
 
+import '../modules/inspections/bindings/inspection_list_binding.dart';
+import '../modules/inspections/views/inspection_list_view.dart';
+
+import '../modules/inspection_detail/bindings/inspection_detail_binding.dart';
+import '../modules/inspection_detail/views/inspection_detail_view.dart';
+
 class AppPages {
   static const initial = AppRoutes.initial;
 
@@ -51,6 +57,16 @@ class AppPages {
       name: AppRoutes.inspectionForm,
       page: () => const InspectionFormView(),
       binding: InspectionFormBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.inspections,
+      page: () => const InspectionListView(),
+      binding: InspectionListBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.inspectionDetail,
+      page: () => const InspectionDetailView(),
+      binding: InspectionDetailBinding(),
     ),
   ];
 }

@@ -6,4 +6,6 @@ abstract class AppRoutes {
   static const home = '/home';
   static const profile = '/profile';
   static const inspectionForm = '/inspection-form';
+  static const inspections = '/inspections';
+  static const inspectionDetail = '/inspection-detail';
 }

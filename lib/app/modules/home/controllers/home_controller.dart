@@ -29,6 +29,10 @@ class HomeController extends GetxController {
     Get.toNamed(AppRoutes.inspectionForm);
   }
 
+  // Abrir historial de inspecciones.
+  void openInspectionList() {
+    Get.toNamed(AppRoutes.inspections);
+  }
   // Cerrar sesión
   Future<void> logout() async {
     final result = await _authController.logout();

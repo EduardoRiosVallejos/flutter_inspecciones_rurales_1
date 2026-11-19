@@ -21,16 +21,23 @@ class InspectionProvider {
     return _inspectionsCollection.doc().id;
   }
 
-  // Iniciar el guardado sin esperar la confirmación del servidor.
+  // Crear inspección sin esperar la confirmación del servidor.
   void createInspection(InspectionModel inspection) {
+    debugPrint('INSPECCIÓN ENVIADA A FIRESTORE: ${inspection.id}');
+
     final writeFuture = _inspectionsCollection
         .doc(inspection.id)
         .set(inspection.toFirestore());
 
-    // Capturar posibles errores cuando Firestore intente sincronizar.
     unawaited(
-      writeFuture.catchError((Object error) {
-        debugPrint('Error al sincronizar inspección: $error');
+      writeFuture.then((_) {
+        debugPrint(
+          'INSPECCIÓN SINCRONIZADA CON FIRESTORE: ${inspection.id}',
+        );
+      }).catchError((Object error) {
+        debugPrint(
+          'ERROR AL SINCRONIZAR INSPECCIÓN ${inspection.id}: $error',
+        );
       }),
     );
   }
@@ -49,9 +56,10 @@ class InspectionProvider {
     );
   }
 
-  // Obtener las inspecciones de un usuario.
+  // Obtener las inspecciones de un usuario una sola vez.
   Future<List<InspectionModel>> getUserInspections(
-      String userId) async {
+    String userId,
+  ) async {
     final query = await _inspectionsCollection
         .where('userId', isEqualTo: userId)
         .get();
@@ -64,5 +72,24 @@ class InspectionProvider {
           ),
         )
         .toList();
+  }
+
+  // Escuchar las inspecciones del usuario en tiempo real.
+  Stream<List<InspectionModel>> watchUserInspections(
+    String userId,
+  ) {
+    return _inspectionsCollection
+        .where('userId', isEqualTo: userId)
+        .snapshots(includeMetadataChanges: true)
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (document) => InspectionModel.fromFirestore(
+                  document.data(),
+                  document.id,
+                ),
+              )
+              .toList(),
+        );
   }
 }

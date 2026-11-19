@@ -9,23 +9,32 @@ class InspectionRepository {
     required this._inspectionProvider,
   });
 
-  // Generar ID de inspección
+  // Generar ID de inspección.
   String generateInspectionId() {
     return _inspectionProvider.generateInspectionId();
   }
 
-  // Crear inspección
+  // Crear inspección.
   void createInspection(InspectionModel inspection) {
     _inspectionProvider.createInspection(inspection);
   }
 
-  // Obtener inspección por ID
+  // Obtener inspección por ID.
   Future<InspectionModel?> getInspection(String id) async {
     return await _inspectionProvider.getInspection(id);
   }
 
-  // Obtener inspecciones de un usuario
-  Future<List<InspectionModel>> getUserInspections(String userId) async {
+  // Obtener inspecciones de un usuario.
+  Future<List<InspectionModel>> getUserInspections(
+    String userId,
+  ) async {
     return await _inspectionProvider.getUserInspections(userId);
+  }
+
+  // Escuchar inspecciones del usuario en tiempo real.
+  Stream<List<InspectionModel>> watchUserInspections(
+    String userId,
+  ) {
+    return _inspectionProvider.watchUserInspections(userId);
   }
 }
