@@ -134,4 +134,11 @@ class InspectionProvider {
               .toList(),
         );
   }
+    // Escuchar inspecciones conservando los metadatos de Firestore.
+  Stream<QuerySnapshot<Map<String, dynamic>>>
+      watchUserInspectionsWithMetadata(String userId) {
+    return _inspectionsCollection
+        .where('userId', isEqualTo: userId)
+        .snapshots(includeMetadataChanges: true);
+  }
 }

@@ -1,6 +1,7 @@
 
 import '../models/inspection_model.dart';
 import '../providers/inspection_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InspectionRepository {
   final InspectionProvider _inspectionProvider;
@@ -47,5 +48,11 @@ class InspectionRepository {
     String userId,
   ) {
     return _inspectionProvider.watchUserInspections(userId);
+  }
+
+    // Escuchar inspecciones conservando los metadatos de Firestore.
+  Stream<QuerySnapshot<Map<String, dynamic>>>
+      watchUserInspectionsWithMetadata(String userId) {
+    return _inspectionProvider.watchUserInspectionsWithMetadata(userId);
   }
 }

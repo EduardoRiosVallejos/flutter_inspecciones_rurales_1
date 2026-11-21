@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,16 @@ class InspectionListController extends GetxController {
   // Mensaje de error.
   final RxString errorMessage = ''.obs;
 
-  StreamSubscription<List<InspectionModel>>? _subscription;
+  // Metadatos de diagnóstico Offline First.
+  final RxBool isFromCache = false.obs;
+  final RxBool hasPendingWrites = false.obs;
+  final RxInt pendingInspectionsCount = 0.obs;
+
+  // IDs de inspecciones con cambios pendientes.
+  final RxSet<String> pendingInspectionIds = <String>{}.obs;
+
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
+      _subscription;
 
   @override
   void onInit() {
@@ -32,7 +42,7 @@ class InspectionListController extends GetxController {
     loadInspections();
   }
 
-  // Escuchar las inspecciones del usuario autenticado.
+  // Escuchar inspecciones y metadatos de Firestore.
   void loadInspections() {
     final currentUser = FirebaseAuth.instance.currentUser;
 
@@ -49,10 +59,36 @@ class InspectionListController extends GetxController {
     _subscription?.cancel();
 
     _subscription = inspectionRepository
-        .watchUserInspections(currentUser.uid)
+        .watchUserInspectionsWithMetadata(currentUser.uid)
         .listen(
-      (inspectionList) {
-        inspections.assignAll(inspectionList);
+      (snapshot) {
+        // Actualizar la lista de inspecciones.
+        inspections.assignAll(
+          snapshot.docs.map(
+            (document) => InspectionModel.fromFirestore(
+              document.data(),
+              document.id,
+            ),
+          ),
+        );
+
+        // Consultar si los datos vienen de la caché.
+        isFromCache.value = snapshot.metadata.isFromCache;
+
+        // Consultar si existen escrituras pendientes.
+        hasPendingWrites.value =
+            snapshot.metadata.hasPendingWrites;
+
+        // Identificar las inspecciones con escrituras pendientes.
+        final pendingIds = snapshot.docs
+            .where((document) => document.metadata.hasPendingWrites)
+            .map((document) => document.id)
+            .toSet();
+
+        pendingInspectionIds.assignAll(pendingIds);
+
+        pendingInspectionsCount.value = pendingIds.length;
+
         isLoading.value = false;
         errorMessage.value = '';
       },
